@@ -1,5 +1,6 @@
 import { ensureMethod, jsonResponse } from "../../src/http";
 import { withErrorHandling, VercelRequest } from "../../src/handler";
+import { parseAudioFromJson } from "../../src/audio_from_json";
 import { parseAudioUpload } from "../../src/multipart";
 import {
   callClaudeJson,
@@ -9,11 +10,20 @@ import {
 } from "../../src/integrations";
 import { completeInitialSchema, completeMatchSchema } from "../../src/types";
 
+function getContentType(req: any): string {
+  const h: any = req.headers;
+  if (!h) return "";
+  if (typeof h.get === "function") return String(h.get("content-type") || "");
+  return String(h["content-type"] || h["Content-Type"] || "");
+}
 
 export default async function handler(req: VercelRequest, res: any): Promise<void> {
   await withErrorHandling(res, async () => {
     ensureMethod(req, "POST");
-    const file = await parseAudioUpload(req);
+    const ct = getContentType(req);
+const file = ct.includes("application/json")
+  ? await parseAudioFromJson(req)
+  : await parseAudioUpload(req);
     const transcript = await transcribeWithWhisper(file.filepath, file.mimetype || "audio/m4a", file.originalFilename || undefined);
 
     const completion = await callClaudeJson({
