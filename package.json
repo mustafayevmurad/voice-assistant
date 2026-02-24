@@ -10,11 +10,13 @@
   "dependencies": {
     "formidable": "^3.5.1",
     "zod": "^3.24.2",
-    "@vercel/node": "^5.0.0"
+    "@vercel/node": "^5.0.0",
+    "busboy": "^1.6.0"
   },
   "devDependencies": {
     "@types/node": "^22.13.10",
     "@types/formidable": "^3.4.5",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.2",
+    "@types/busboy": "^1.5.4"
   }
 }
