@@ -1,5 +1,5 @@
 import formidable, { type File, type Files, type Fields } from "formidable";
-import type { IncomingMessage } from "http";
+import type { VercelRequest } from "@vercel/node";
 import { HttpError } from "./http";
 
 const MAX_FILE_SIZE = 25 * 1024 * 1024;
@@ -15,7 +15,7 @@ const ALLOWED_MIME = new Set([
   "audio/x-caf"
 ]);
 
-const parseForm = (req: IncomingMessage): Promise<Files> => {
+const parseForm = (req: VercelRequest): Promise<Files> => {
   const form = formidable({
     multiples: false,
     maxFiles: 1,
@@ -23,7 +23,7 @@ const parseForm = (req: IncomingMessage): Promise<Files> => {
   });
 
   return new Promise((resolve, reject) => {
-  form.parse(req, (err: any, _fields: Fields, files: Files) => {
+  form.parse(req as any, (err: any, _fields: Fields, files: Files) => {
     if (err) {
       reject(err);
       return;
@@ -33,7 +33,7 @@ const parseForm = (req: IncomingMessage): Promise<Files> => {
 });
 };
 
-export const parseAudioUpload = async (req: IncomingMessage): Promise<File> => {
+export const parseAudioUpload = async (req: VercelRequest): Promise<File> => {
   try {
     const files = await parseForm(req);
     const field = files.file;
