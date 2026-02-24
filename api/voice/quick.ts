@@ -1,8 +1,15 @@
 import { ensureMethod, HttpError, jsonResponse } from "../../src/http";
 import { withErrorHandling, VercelRequest } from "../../src/handler";
 import { parseAudioUpload } from "../../src/multipart";
+import { parseAudioFromJson } from "../../src/audio_from_json";
 import { callClaudeJson, createTodoistTask, telegramSendMessage, transcribeWithWhisper } from "../../src/integrations";
 import { quickSchema } from "../../src/types";
+function getContentType(req: any): string {
+  const h: any = req.headers;
+  if (!h) return "";
+  if (typeof h.get === "function") return String(h.get("content-type") || "");
+  return String(h["content-type"] || h["Content-Type"] || "");
+}
 
 
 export default async function handler(req: VercelRequest, res: any): Promise<void> {
