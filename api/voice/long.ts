@@ -10,9 +10,6 @@ import {
 } from "../../src/integrations";
 import { longSchema } from "../../src/types";
 
-export const config = {
-  runtime: "nodejs"
-};
 
 export default async function handler(req: VercelRequest, res: any): Promise<void> {
   await withErrorHandling(res, async () => {
