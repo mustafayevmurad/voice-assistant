@@ -8,7 +8,10 @@ import { quickSchema } from "../../src/types";
 export default async function handler(req: VercelRequest, res: any): Promise<void> {
   await withErrorHandling(res, async () => {
     ensureMethod(req, "POST");
-    const file = await parseAudioUpload(req);
+    const ct = getContentType(req);
+const file = ct.includes("application/json")
+  ? await parseAudioFromJson(req)
+  : await parseAudioUpload(req);
     const transcript = await transcribeWithWhisper(file.filepath, file.mimetype || "audio/m4a", file.originalFilename || undefined);
 
     const quick = await callClaudeJson({
