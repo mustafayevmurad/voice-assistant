@@ -4,8 +4,8 @@
   "private": true,
   "type": "commonjs",
   "scripts": {
-    "build": "tsc --noEmit",
-    "check": "tsc --noEmit"
+    "build": "echo \"No build step required\"",
+  "check": "tsc --noEmit"
   },
   "dependencies": {
     "formidable": "^3.5.1",
