@@ -1,6 +1,7 @@
 import formidable, { type File, type Files } from "formidable";
 import type { IncomingMessage } from "http";
 import { HttpError } from "./http";
+import type { Fields, Files } from "formidable";
 
 const MAX_FILE_SIZE = 25 * 1024 * 1024;
 const ALLOWED_MIME = new Set([
@@ -23,14 +24,14 @@ const parseForm = (req: IncomingMessage): Promise<Files> => {
   });
 
   return new Promise((resolve, reject) => {
-    form.parse(req, (err, _fields, files) => {
-      if (err) {
-        reject(err);
-        return;
-      }
-      resolve(files);
-    });
+  form.parse(req, (err: any, _fields: Fields, files: Files) => {
+    if (err) {
+      reject(err);
+      return;
+    }
+    resolve(files);
   });
+});
 };
 
 export const parseAudioUpload = async (req: IncomingMessage): Promise<File> => {
