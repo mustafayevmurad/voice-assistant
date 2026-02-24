@@ -1,7 +1,6 @@
-import formidable, { type File, type Files } from "formidable";
+import formidable, { type File, type Files, type Fields } from "formidable";
 import type { IncomingMessage } from "http";
 import { HttpError } from "./http";
-import type { Fields, Files } from "formidable";
 
 const MAX_FILE_SIZE = 25 * 1024 * 1024;
 const ALLOWED_MIME = new Set([
